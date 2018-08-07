@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{99FD01E7-4C64-4CB5-BCE6-6A50D161EE31}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>ChasmDeserializer</RootNamespace>
+    <AssemblyName>ChasmDes</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="FNA">
+      <HintPath>..\packages\FNA.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="JSONConverters\CSVConverter.cs" />
+    <Compile Include="JSONConverters\ItemConverter.cs" />
+    <Compile Include="JSONConverters\XNAColorConverter.cs" />
+    <Compile Include="JSONConverters\XNARectangleConverter.cs" />
+    <Compile Include="JSONConverters\XNAVector2Converter.cs" />
+    <Compile Include="JSONConverters\XNAPointConverter.cs" />
+    <Compile Include="Model\Animation2D\Animation2DInfo.cs" />
+    <Compile Include="Model\Animation2D\Animations.cs" />
+    <Compile Include="Model\Coversations\Conversation.cs" />
+    <Compile Include="Model\Coversations\ConversationSystem.cs" />
+    <Compile Include="Model\Coversations\ItemDefinition.cs" />
+    <Compile Include="Model\CSV\CSVData.cs" />
+    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Interfaces\IBinarySaveLoad.cs" />
+    <Compile Include="Model\FormattedText\CustomStoreInfo.cs" />
+    <Compile Include="Model\FormattedText\FormattedText.cs" />
+    <Compile Include="Model\FormattedText\StringInline.cs" />
+    <Compile Include="Model\FormattedText\StringLine.cs" />
+    <Compile Include="Model\FormattedText\StringStore.cs" />
+    <Compile Include="Model\Music\MusicDefinition.cs" />
+    <Compile Include="Model\Music\MusicManager.cs" />
+    <Compile Include="Model\Overworld\DungeonDefinition.cs" />
+    <Compile Include="Model\Overworld\OverWorldManager.cs" />
+    <Compile Include="Model\Overworld\OWVariable.cs" />
+    <Compile Include="Model\Overworld\PathCheckDefinition.cs" />
+    <Compile Include="Model\Overworld\RoomDefinition.cs" />
+    <Compile Include="Model\Overworld\RoomLink.cs" />
+    <Compile Include="Model\Overworld\TagDefinition.cs" />
+    <Compile Include="Model\Overworld\WorldSettings.cs" />
+    <Compile Include="Model\Overworld\WorldTagVariation.cs" />
+    <Compile Include="Model\Particles\KeyFramePreset.cs" />
+    <Compile Include="Model\Particles\ParticleEngine.cs" />
+    <Compile Include="Model\Particles\ParticleGroup.cs" />
+    <Compile Include="Model\Particles\ParticlePresets.cs" />
+    <Compile Include="Model\RoomManager\RoomManager.cs" />
+    <Compile Include="Model\SaveGameData\CurrentRoomData.cs" />
+    <Compile Include="Model\Enums.cs" />
+    <Compile Include="Model\Animation2D\Hitbox.cs" />
+    <Compile Include="Model\SaveGameData\Item.cs" />
+    <Compile Include="Model\SaveGameData\PlayerSaveData.cs" />
+    <Compile Include="Model\Animation2D\Polygon.cs" />
+    <Compile Include="Model\Animation2D\PolygonList.cs" />
+    <Compile Include="Model\Animation2D\SoundEvent.cs" />
+    <Compile Include="Model\TextureAtlas\TextureInfo.cs" />
+    <Compile Include="Model\TextureAtlas\TextureInfoList.cs" />
+    <Compile Include="Model\SaveGameData\UserInfo.cs" />
+    <Compile Include="Model\SaveGameData\WorldSaveState.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
