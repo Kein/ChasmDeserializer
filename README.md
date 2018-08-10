@@ -1,4 +1,4 @@
-A simple tool Chasm gamedata deserialization.
+A simple tool for Chasm gamedata deserialization.
 
 # NOTES
 * Particles currently cannot be saved.
