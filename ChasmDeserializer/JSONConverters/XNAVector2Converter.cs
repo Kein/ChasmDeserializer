@@ -43,7 +43,7 @@ namespace ChasmDeserializer.JSONConverters
         private static float? GetTokenValue(JObject o, string tokenName)
         {
             JToken t;
-            return o.TryGetValue(tokenName, StringComparison.InvariantCultureIgnoreCase, out t) ? (float)t : (float?)null;
+            return o.TryGetValue(tokenName, StringComparison.OrdinalIgnoreCase, out t) ? (float)t : (float?)null;
         }
     }
 }

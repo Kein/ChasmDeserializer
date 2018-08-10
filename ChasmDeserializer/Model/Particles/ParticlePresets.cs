@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using ChasmDeserializer.Interfaces;
 using Microsoft.Xna.Framework;
 
 namespace ChasmDeserializer.Model.Particles

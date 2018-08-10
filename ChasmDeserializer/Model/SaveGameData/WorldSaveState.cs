@@ -1,7 +1,10 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using ChasmDeserializer.Interfaces;
+using ChasmDeserializer.Model.SaveGameData.WorldState;
+using Newtonsoft.Json;
 
 namespace ChasmDeserializer.Model
 {
@@ -30,7 +33,10 @@ namespace ChasmDeserializer.Model
         public int CrateCount;
         public Dictionary<int, RoomMark> RoomMarks;
         public float OverworldFileVersion;
-        public byte[] OverWorldSaveState;
+        public OverWorldSaveState OverWorldSaveState;
+        [JsonIgnore]
+        public int OWByteSize;
+        private byte[] OverWorldSaveStateBytes;
 
         public void Load(BinaryReader read)
         {
@@ -65,27 +71,24 @@ namespace ChasmDeserializer.Model
             CurrentRoom = new CurrentRoomData();
             CurrentRoom.Load(read);
             Mode = (GameMode)read.ReadInt32();
-            int count2 = read.ReadInt32();
-            AreasExplored = new List<string>(count2);
-            for (int j = 0; j < count2; j++)
+            count = read.ReadInt32();
+            AreasExplored = new List<string>(count);
+            for (int j = 0; j < count; j++)
                 AreasExplored.Add(read.ReadString());
-            DungeonsExplored = new Dictionary<string, List<int>>();
-            count2 = read.ReadInt32();
-            for (int k = 0; k < count2; k++)
+            count = read.ReadInt32();
+            DungeonsExplored = new Dictionary<string, List<int>>(count);
+            for (int k = 0; k < count; k++)
             {
-                string key2 = read.ReadString();
-                int num3 = read.ReadInt32();
-                List<int> list = new List<int>();
-                DungeonsExplored.Add(key2, list);
-                for (int l = 0; l < num3; l++)
-                {
-                    int item = read.ReadInt32();
-                    list.Add(item);
-                }
+                string key = read.ReadString();
+                int innerCount = read.ReadInt32();
+                List<int> list = new List<int>(innerCount);
+                for (int l = 0; l < innerCount; l++)
+                    list.Add(read.ReadInt32());
+                DungeonsExplored.Add(key, list);
             }
             ScreensExplored = new HashSet<RoomCordinate>();
-            count2 = read.ReadInt32();
-            for (int m = 0; m < count2; m++)
+            count = read.ReadInt32();
+            for (int m = 0; m < count; m++)
                 ScreensExplored.Add(RoomCordinate.Load(read));
             if (read.BaseStream.Position < read.BaseStream.Length)
             {
@@ -94,9 +97,9 @@ namespace ChasmDeserializer.Model
             }
             if (read.BaseStream.Position < read.BaseStream.Length)
             {
-                EnemiesKilled = new Dictionary<string, EnemyCounter>();
-                count2 = read.ReadInt32();
-                for (int n = 0; n < count2; n++)
+                count = read.ReadInt32();
+                EnemiesKilled = new Dictionary<string, EnemyCounter>(count);
+                for (int n = 0; n < count; n++)
                 {
                     string typeName = read.ReadString();
                     int current = read.ReadInt32();
@@ -120,8 +123,8 @@ namespace ChasmDeserializer.Model
             CrateCount = read.ReadInt32();
             if (version >= 1.77f)
             {
-                RoomMarks = new Dictionary<int, RoomMark>();
                 int rmCount = read.ReadInt32();
+                RoomMarks = new Dictionary<int, RoomMark>(rmCount);
                 for (int num5 = 0; num5 < rmCount; num5++)
                 {
                     int roomkey = read.ReadInt32();
@@ -134,12 +137,20 @@ namespace ChasmDeserializer.Model
                 if (version >= 1.76f)
                 {
                     OverworldFileVersion = read.ReadSingle();
-                    OverWorldSaveState = read.ReadBytes(read.ReadInt32());
+                    OverWorldSaveStateBytes = read.ReadBytes(read.ReadInt32());
                 }
                 else
                 {
                     OverworldFileVersion = version;
-                    OverWorldSaveState = read.ReadAllBytes();
+                    OverWorldSaveStateBytes = read.ReadAllBytes();
+                }
+                OverWorldSaveState = new OverWorldSaveState();
+                using (MemoryStream input = new MemoryStream(OverWorldSaveStateBytes))
+                {
+                    using (BinaryReader reader = new BinaryReader(input))
+                    {
+                        OverWorldSaveState.Load(reader, OverworldFileVersion);
+                    }
                 }
             }
         }
@@ -208,12 +219,29 @@ namespace ChasmDeserializer.Model
                 writer.Write(mark.Key);
                 mark.Value.Save(writer);
             }
-            if (this.OverWorldSaveState != null && this.OverWorldSaveState.Length > 0)
+            if (this.OverWorldSaveState != null)
+            {
+                writer.Write(true);
+                float version = string.IsNullOrEmpty(CurrentSaveVersion) ? -1f : float.Parse(CurrentSaveVersion, NumberStyles.AllowDecimalPoint, NumberFormatInfo.InvariantInfo);
+                writer.Write(version);
+                using (MemoryStream memoryStream = new MemoryStream())
+                {
+                    using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
+                    {
+                        OverWorldSaveState.Save(binaryWriter);
+                    }
+                    byte[] array = memoryStream.ToArray();
+                    writer.Write(array.Length);
+                    writer.Write(array);
+                }
+                return;
+            }
+            if (OverWorldSaveStateBytes != null && this.OverWorldSaveStateBytes.Length > 0)
             {
                 writer.Write(true);
                 writer.Write(this.OverworldFileVersion);
-                writer.Write(this.OverWorldSaveState.Length);
-                writer.Write(this.OverWorldSaveState);
+                writer.Write(this.OverWorldSaveStateBytes.Length);
+                writer.Write(this.OverWorldSaveStateBytes);
                 return;
             }
             writer.Write(false);

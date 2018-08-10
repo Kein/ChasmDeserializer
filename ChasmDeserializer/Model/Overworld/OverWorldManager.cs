@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using System.Collections.Generic;
 using System.IO;
+using ChasmDeserializer.Interfaces;
 
 namespace ChasmDeserializer.Model.Overworld
 {

@@ -31,20 +31,19 @@ namespace ChasmDeserializer.JSONConverters
         {
             var o = JObject.Load(reader);
             JToken x;
-            var ID = o.TryGetValue("ID", StringComparison.InvariantCultureIgnoreCase, out x) ? (string)x : string.Empty;
-            var Count = o.TryGetValue("Count", StringComparison.InvariantCultureIgnoreCase, out x) ? (int)x : 0;
-            var Experience = o.TryGetValue("Experience", StringComparison.InvariantCultureIgnoreCase, out x) ? (int)x : 0;
-            var tier = o.TryGetValue("UnlockTier", StringComparison.InvariantCultureIgnoreCase, out x) ? (int)x : 0;
+            var ID = o.TryGetValue("ID", StringComparison.OrdinalIgnoreCase, out x) ? (string)x : string.Empty;
+            var Count = o.TryGetValue("Count", StringComparison.OrdinalIgnoreCase, out x) ? (int)x : 0;
+            var Experience = o.TryGetValue("Experience", StringComparison.OrdinalIgnoreCase, out x) ? (int)x : 0;
+            var tier = o.TryGetValue("UnlockTier", StringComparison.OrdinalIgnoreCase, out x) ? (int)x : 0;
             var UnlockTier = (UnlockTier)tier;
-            var Item = new Item() { ID = ID, Count = Count, Experience = Experience, UnlockTier = UnlockTier };
             if (o.Count > 4)
             {
-                if (String.Equals(ID.Trim(), "sword_assassins", StringComparison.OrdinalIgnoreCase))
+                if (String.Equals(ID, "sword_assassins", StringComparison.OrdinalIgnoreCase))
                 {
                     var aItem = new AssassinsSword() { ID = ID, Count = Count, Experience = Experience, UnlockTier = UnlockTier };
                     JToken a;
-                    var CurrentKills = o.TryGetValue("CurrentKills", StringComparison.InvariantCultureIgnoreCase, out a) ? (int)x : 0;
-                    var Level = o.TryGetValue("Level", StringComparison.InvariantCultureIgnoreCase, out a) ? (int)x : 0;
+                    var CurrentKills = o.TryGetValue("CurrentKills", StringComparison.OrdinalIgnoreCase, out a) ? (int)x : 0;
+                    var Level = o.TryGetValue("Level", StringComparison.OrdinalIgnoreCase, out a) ? (int)x : 0;
                     aItem.CurrentKills = CurrentKills;
                     aItem.Level = Level;
                     return aItem;
@@ -53,10 +52,10 @@ namespace ChasmDeserializer.JSONConverters
                 {
                     var fItem = new FamiliarItem() { ID = ID, Count = Count, Experience = Experience, UnlockTier = UnlockTier };
                     JToken f;
-                    var Position = o.TryGetValue("Position", StringComparison.InvariantCultureIgnoreCase, out f) ? JsonConvert.DeserializeObject<Vector2>(f.ToString(), new XNAVector2Converter()) : default(Vector2);
-                    var LVL = o.TryGetValue("LVL", StringComparison.InvariantCultureIgnoreCase, out f) ? (int)f : 0;
-                    var STR = o.TryGetValue("STR", StringComparison.InvariantCultureIgnoreCase, out f) ? (int)f : 0;
-                    var FamiliarExperience =  o.TryGetValue("FamiliarExperience", StringComparison.InvariantCultureIgnoreCase, out f) ? (int)f : 0;
+                    var Position = o.TryGetValue("Position", StringComparison.OrdinalIgnoreCase, out f) ? JsonConvert.DeserializeObject<Vector2>(f.ToString(), new XNAVector2Converter()) : default(Vector2);
+                    var LVL = o.TryGetValue("LVL", StringComparison.OrdinalIgnoreCase, out f) ? (int)f : 0;
+                    var STR = o.TryGetValue("STR", StringComparison.OrdinalIgnoreCase, out f) ? (int)f : 0;
+                    var FamiliarExperience =  o.TryGetValue("FamiliarExperience", StringComparison.OrdinalIgnoreCase, out f) ? (int)f : 0;
                     fItem.Position = Position;
                     fItem.LVL = LVL;
                     fItem.STR = STR;
@@ -64,7 +63,7 @@ namespace ChasmDeserializer.JSONConverters
                     return fItem;
                 }
             }
-            return Item;
+            return new Item() { ID = ID, Count = Count, Experience = Experience, UnlockTier = UnlockTier };
         }
     }
 }

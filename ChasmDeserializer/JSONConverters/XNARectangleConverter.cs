@@ -47,7 +47,7 @@ namespace ChasmDeserializer.JSONConverters
         private static int? GetTokenValue(JObject o, string tokenName)
         {
             JToken t;
-            return o.TryGetValue(tokenName, StringComparison.InvariantCultureIgnoreCase, out t) ? (int)t : (int?)null;
+            return o.TryGetValue(tokenName, StringComparison.OrdinalIgnoreCase, out t) ? (int)t : (int?)null;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace ChasmDeserializer
+namespace ChasmDeserializer.Interfaces
 {
     public interface IBinarySaveLoad
     {

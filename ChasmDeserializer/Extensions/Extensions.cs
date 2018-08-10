@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -8,11 +9,8 @@ namespace ChasmDeserializer
     {
         // Whatever man
         public static string NullCheck(this string s) => s = s ?? string.Empty;
+        public static Vector2 ToVector2(this Point p) => new Vector2((float)p.X, (float)p.Y);
 
-        public static Vector2 ToVector2(this Point p)
-        {
-            return new Vector2((float)p.X, (float)p.Y);
-        }
 
         // XNA Point struct
         public static void Write(this BinaryWriter writer, Point rect)
@@ -80,18 +78,14 @@ namespace ChasmDeserializer
         {
             writer.Write(c.Count);
             foreach (string value in c)
-            {
                 writer.Write(value);
-            }
         }
         public static List<string> ReadStrings(this BinaryReader reader)
         {
             List<string> list = new List<string>();
             int num = reader.ReadInt32();
             for (int i = 0; i < num; i++)
-            {
                 list.Add(reader.ReadString());
-            }
             return list;
         }
 

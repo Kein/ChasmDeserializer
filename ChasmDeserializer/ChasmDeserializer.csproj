@@ -64,7 +64,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="JSONConverters\CSVConverter.cs" />
+    <Compile Include="Interfaces\ISaveGame.cs" />
+    <Compile Include="JSONConverters\GenericPropConverter.cs" />
+    <Compile Include="JSONConverters\StringCollectionConverter.cs" />
     <Compile Include="JSONConverters\ItemConverter.cs" />
     <Compile Include="JSONConverters\XNAColorConverter.cs" />
     <Compile Include="JSONConverters\XNARectangleConverter.cs" />
@@ -103,10 +105,28 @@
     <Compile Include="Model\Enums.cs" />
     <Compile Include="Model\Animation2D\Hitbox.cs" />
     <Compile Include="Model\SaveGameData\Item.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\AreaConnectionDef.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\ContainerData.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Dungeon.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\DungeonConnection.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\EnemyInfo.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\LocalEnums.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\OverWorldSaveState.cs" />
     <Compile Include="Model\SaveGameData\PlayerSaveData.cs" />
     <Compile Include="Model\Animation2D\Polygon.cs" />
     <Compile Include="Model\Animation2D\PolygonList.cs" />
     <Compile Include="Model\Animation2D\SoundEvent.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\PropData.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\RoomInstance.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\ComboLockHint.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\Crate.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\DestructibleWall.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\GenericProp.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\NPCdata.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\SaveableProp.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\Shrine.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\TreasureChest.cs" />
+    <Compile Include="Model\SaveGameData\WorldState\Saveable\Trigger.cs" />
     <Compile Include="Model\TextureAtlas\TextureInfo.cs" />
     <Compile Include="Model\TextureAtlas\TextureInfoList.cs" />
     <Compile Include="Model\SaveGameData\UserInfo.cs" />

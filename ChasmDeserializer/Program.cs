@@ -11,10 +11,11 @@ using ChasmDeserializer.Model.Overworld;
 using ChasmDeserializer.Model.Particles;
 using ChasmDeserializer.Model.RoomManager;
 using Newtonsoft.Json;
+using ChasmDeserializer.Interfaces;
 
 namespace ChasmDeserializer
 {
-    class Program
+    public class Program
     {
         // No I'm not using NDesk or Mono.Options, bite me
         private const string version = "\nCurrent version: v0.4 (07 Aug 2018) by KZ";
@@ -41,7 +42,7 @@ namespace ChasmDeserializer
 
         static readonly JsonConverter[] Anim2DConverters = { new XNAVector2Converter(), new XNARectangleConverter() };
         static readonly JsonConverter[] TextureConverters = { new XNARectangleConverter() };
-        static readonly JsonConverter[] SaveDataConverters = { new ItemConverter(), new XNAVector2Converter() };
+        static readonly JsonConverter[] SaveDataConverters = { new ItemConverter(), new XNAVector2Converter(), new XNARectangleConverter(), new XNAPointConverter(), new GenericPropConverter() };
         static readonly JsonConverter[] FormtTextCoverters = { new XNAVector2Converter(), new XNAColorConverter() };
         static readonly JsonConverter[] ParticleConverters = { new XNARectangleConverter(), new XNAVector2Converter(), new XNAColorConverter() };
         static readonly JsonConverter[] OverworldConverters = { new XNAPointConverter() };
@@ -69,7 +70,7 @@ namespace ChasmDeserializer
                         {
                             var binary = LoadBinary<CSVData>(inFile);
                             var ext = outFile.LastIndexOf('.') > -1 && (outFile.Length - outFile.LastIndexOf('.')) == 4 ? outFile.Substring(outFile.LastIndexOf('.') + 1) : string.Empty;
-                            var decoded = String.Equals(ext, "csv", StringComparison.OrdinalIgnoreCase) ? processCVS(binary).ToString() : JsonConvert.SerializeObject(binary);
+                            var decoded = String.Equals(ext, "csv", StringComparison.OrdinalIgnoreCase) ? processCVS(binary).ToString() : JsonConvert.SerializeObject(binary, Formatting.Indented, new StringCollectionConverter());
                             File.WriteAllText(outFile, decoded);
                         }
                         else if (action == "-s")
@@ -114,7 +115,7 @@ namespace ChasmDeserializer
                         break;
                 }
             }
-            catch (Exception ex) { reply = $"ERROR: {ex.Message}"; }
+            catch (Exception ex) { reply = $"ERROR: {ex}"; }
             Console.Write(reply);
         }
 
@@ -180,36 +181,6 @@ namespace ChasmDeserializer
                 obj.Save(writer);
             }
         }
-
-        // Unused
-        private static void DeserializeObject<T>(string inFile, string outFile, Formatting format = Formatting.Indented, JsonConverter[] converters = null) where T : IBinarySaveLoad
-        {
-            T target = (T)((object)Activator.CreateInstance(typeof(T)));
-            using (BinaryReader binaryReader = new BinaryReader(File.Open(inFile, FileMode.Open, FileAccess.Read)))
-            {
-                target.Load(binaryReader);
-            }
-            var x = JsonConvert.SerializeObject(target, format, converters);
-            File.WriteAllText(outFile, x);
-        }
-        private static void SerializeObject<T>(string inFile, string outFile, JsonConverter[] converters = null) where T : IBinarySaveLoad
-        {
-            var json = File.ReadAllText(inFile);
-            var target = JsonConvert.DeserializeObject<T>(json, converters);
-            using (FileStream fileStream = File.Open(outFile, FileMode.Create, FileAccess.Write))
-            {
-                BinaryWriter writer = new BinaryWriter(fileStream);
-                target.Save(writer);
-            }
-        }
-        private static void ShowHelp(string msg = null)
-        {
-            msg = msg ?? string.Empty;
-            Console.WriteLine(msg);
-            Console.Write(helpMsg);
-            Console.Write(version);
-        }
-        
     
     }
 }

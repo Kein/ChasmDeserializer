@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ChasmDeserializer.Interfaces;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ChasmDeserializer.Model.Animation2D
