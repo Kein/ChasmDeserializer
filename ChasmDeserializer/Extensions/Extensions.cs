@@ -119,7 +119,7 @@ namespace ChasmDeserializer
             return curve;
         }
 
-        // Used for WorldSaveState
+        // Used for WorldSaveState for whatever reason
         public static byte[] ReadAllBytes(this BinaryReader reader)
         {
             byte[] result;

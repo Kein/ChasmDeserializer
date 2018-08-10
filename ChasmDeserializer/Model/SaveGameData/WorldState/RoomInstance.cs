@@ -25,7 +25,7 @@ namespace ChasmDeserializer.Model.SaveGameData.WorldState
         public Dictionary<int, LinkDefinition> RightDoors;
         public Dictionary<int, LinkDefinition> CustomDoors;
         public List<EnemyInfo> EnemyInfo;
-        public List<KeyValuePair<string, GenericProp>> RandomProps;
+        public List<PropData> RandomProps;
         public List<AreaConnectionDef> AreaConnections;
         public bool IsDark;
         public bool IsBacktrack;
@@ -86,7 +86,7 @@ namespace ChasmDeserializer.Model.SaveGameData.WorldState
                 this.EnemyInfo.Add(item);
             }
             count = reader.ReadInt32();
-            RandomProps = new List<KeyValuePair<string, GenericProp>>(count);
+            RandomProps = new List<PropData>(count);
             for (int m = 0; m < count; m++)
             {
                 string fullName = reader.ReadString();
@@ -95,7 +95,7 @@ namespace ChasmDeserializer.Model.SaveGameData.WorldState
                     : fullName.Substring(fullName.LastIndexOf(".", StringComparison.OrdinalIgnoreCase) + 1);
                 Type type = Type.GetType("ChasmDeserializer.Model.SaveGameData.WorldState.Saveable." + localName);
                 GenericProp genericProp = Activator.CreateInstance(type) as GenericProp;
-                this.RandomProps.Add(new KeyValuePair<string, GenericProp>(fullName, genericProp));
+                this.RandomProps.Add(new PropData(fullName, genericProp));
                 ISaveGame saveGame = genericProp as ISaveGame;
                 saveGame.LoadGame(reader);
             }
@@ -164,8 +164,8 @@ namespace ChasmDeserializer.Model.SaveGameData.WorldState
             writer.Write(RandomProps.Count);
             foreach (var item in RandomProps)
             {
-                writer.Write(item.Key);
-                ISaveGame prop = item.Value as ISaveGame;
+                writer.Write(item.PropFullName);
+                ISaveGame prop = item.PopData as ISaveGame;
                 prop.SaveGame(writer);
             }
             writer.Write(this.AreaConnections.Count);

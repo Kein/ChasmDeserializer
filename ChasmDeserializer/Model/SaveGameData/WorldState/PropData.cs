@@ -6,5 +6,11 @@ namespace ChasmDeserializer.Model.SaveGameData.WorldState
     {
         public string PropFullName;
         public GenericProp PopData;
+
+        public PropData(string propFullName, GenericProp popData)
+        {
+            PropFullName = propFullName;
+            PopData = popData;
+        }
     }
 }
