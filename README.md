@@ -1,10 +1,10 @@
-# ChasmDeserializer
-Simple tool made to deserialize Chasm gamedata
+A simple tool Chasm gamedata deserialization.
 
 # NOTES
 * Particles currently cannot be saved.
 * When decoding normal '.ser' files you can specify output file
   with extension '.csv' to receive standard CSV sheet for tables.
+ * CSV reader currenty not supported.
 
 # USAGE:
 ```
@@ -25,12 +25,15 @@ TYPES:
 -usr    processes global savegame (UserInfo.cfg)
 -sav    processes specific savegame slot (*.sav)
 ```
-# CREDITS
-Kein Zantezuken  
-Tool is provided "as is" under Creative Common ND license.
 
 # CHANGELOG
-Aug 07/18 v0.3  
+Aug 10/18 v0.4
+- Added OverWorldState deserializing to savedgame
+- Small change in JSOn format for FormattedText - it is now part
+  of one big StrStore collection. If you have old version, just
+  add content into strStore { } object manually.
+
+Aug 07/18 v0.3
 - Fixed support for savegames decoding/encoding
 - added support for: conversations, formatted text, music manager
   room manager, particles, overworld
@@ -42,3 +45,5 @@ Aug 05/18 v0.2
 Aug 03/18 v0.1
 - initial release
 
+# CREDITS
+Kein Zantezuken  
