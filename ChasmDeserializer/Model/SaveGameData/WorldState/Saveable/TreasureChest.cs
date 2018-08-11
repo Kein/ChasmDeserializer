@@ -1,4 +1,5 @@
-﻿using ChasmDeserializer.Interfaces;
+﻿using ChasmDeserializer.Extensions;
+using ChasmDeserializer.Interfaces;
 using System.IO;
 
 namespace ChasmDeserializer.Model.SaveGameData.WorldState.Saveable

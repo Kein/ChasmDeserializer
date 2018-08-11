@@ -52,6 +52,7 @@
     <Reference Include="FNA">
       <HintPath>..\packages\FNA.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -64,6 +65,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions\CSVReaderWriter.cs" />
     <Compile Include="Interfaces\ISaveGame.cs" />
     <Compile Include="JSONConverters\GenericPropConverter.cs" />
     <Compile Include="JSONConverters\StringCollectionConverter.cs" />
@@ -78,7 +80,7 @@
     <Compile Include="Model\Coversations\ConversationSystem.cs" />
     <Compile Include="Model\Coversations\ItemDefinition.cs" />
     <Compile Include="Model\CSV\CSVData.cs" />
-    <Compile Include="Extensions\Extensions.cs" />
+    <Compile Include="Extensions\BinaryRWExtensions.cs" />
     <Compile Include="Interfaces\IBinarySaveLoad.cs" />
     <Compile Include="Model\FormattedText\CustomStoreInfo.cs" />
     <Compile Include="Model\FormattedText\FormattedText.cs" />

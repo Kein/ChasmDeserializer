@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using ChasmDeserializer.Extensions;
+using System.Collections.Generic;
 using System.IO;
 
 namespace ChasmDeserializer.Model.FormattedText

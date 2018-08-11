@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using ChasmDeserializer.Extensions;
 using ChasmDeserializer.Interfaces;
 using ChasmDeserializer.Model.SaveGameData.WorldState;
 using Newtonsoft.Json;
@@ -34,8 +35,8 @@ namespace ChasmDeserializer.Model
         public Dictionary<int, RoomMark> RoomMarks;
         public float OverworldFileVersion;
         public OverWorldSaveState OverWorldSaveState;
+        public string GameBuildVersion;
         [JsonIgnore]
-        public int OWByteSize;
         private byte[] OverWorldSaveStateBytes;
 
         public void Load(BinaryReader read)
@@ -131,13 +132,16 @@ namespace ChasmDeserializer.Model
                     RoomMark roomMark = RoomMark.Load(read);
                     RoomMarks.Add(roomkey, roomMark);
                 }
+                GameBuildVersion = version >= 1.79f ? read.ReadString() : null;
             }
-            if (read.ReadBoolean())
+            bool hasOverworldData = read.ReadBoolean();
+            if (hasOverworldData)
             {
                 if (version >= 1.76f)
                 {
                     OverworldFileVersion = read.ReadSingle();
-                    OverWorldSaveStateBytes = read.ReadBytes(read.ReadInt32());
+                    var size = read.ReadInt32();
+                    OverWorldSaveStateBytes = read.ReadBytes(size);
                 }
                 else
                 {
@@ -157,6 +161,7 @@ namespace ChasmDeserializer.Model
 
          public void Save(BinaryWriter writer)
         {
+            float version = string.IsNullOrEmpty(CurrentSaveVersion) ? -1f : float.Parse(CurrentSaveVersion, NumberStyles.AllowDecimalPoint, NumberFormatInfo.InvariantInfo);
             writer.Write(CurrentSaveVersion);
             writer.Write(this.SaveSlot);
             writer.Write(this.ProfileIconKey.NullCheck());
@@ -219,10 +224,10 @@ namespace ChasmDeserializer.Model
                 writer.Write(mark.Key);
                 mark.Value.Save(writer);
             }
+            writer.Write(this.GameBuildVersion.NullCheck());
             if (this.OverWorldSaveState != null)
             {
                 writer.Write(true);
-                float version = string.IsNullOrEmpty(CurrentSaveVersion) ? -1f : float.Parse(CurrentSaveVersion, NumberStyles.AllowDecimalPoint, NumberFormatInfo.InvariantInfo);
                 writer.Write(version);
                 using (MemoryStream memoryStream = new MemoryStream())
                 {

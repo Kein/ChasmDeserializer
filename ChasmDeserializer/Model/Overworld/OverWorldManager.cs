@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using ChasmDeserializer.Interfaces;
+using ChasmDeserializer.Extensions;
 
 namespace ChasmDeserializer.Model.Overworld
 {

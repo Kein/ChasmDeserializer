@@ -1,4 +1,5 @@
-﻿using ChasmDeserializer.Interfaces;
+﻿using ChasmDeserializer.Extensions;
+using ChasmDeserializer.Interfaces;
 using Microsoft.Xna.Framework;
 using System.IO;
 

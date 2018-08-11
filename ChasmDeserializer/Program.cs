@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Text;
 using ChasmDeserializer.JSONConverters;
 using ChasmDeserializer.Model;
 using ChasmDeserializer.Model.Animation2D;
@@ -12,14 +11,19 @@ using ChasmDeserializer.Model.Particles;
 using ChasmDeserializer.Model.RoomManager;
 using Newtonsoft.Json;
 using ChasmDeserializer.Interfaces;
+using ChasmDeserializer.Extensions;
+using System.Threading;
+using System.Globalization;
 
 namespace ChasmDeserializer
 {
     public class Program
     {
-        // No I'm not using NDesk or Mono.Options, bite me
-        private const string version = "\nCurrent version: v0.4 (07 Aug 2018) by KZ";
-        private const string helpMsg = "\nUSAGE:\n" +
+        // No, I'm not using NDesk or Mono.Options, bite me.
+        private const string version = "\nCurrent version: v0.4a (07 Aug 2018) KZ";
+        private const string gameVer = "\nSupported game version: v1.03 (from 10 Aug 2018)";
+        private const string helpMsg =
+            "\nUSAGE:\n" +
             "ChasmDes.exe [action] [type] [inputFile] <outputFile>\n" +
             "ACTIONS:\n" +
             " -d\tdeserialize/decode game-file into JSON\n" +
@@ -42,7 +46,7 @@ namespace ChasmDeserializer
 
         static readonly JsonConverter[] Anim2DConverters = { new XNAVector2Converter(), new XNARectangleConverter() };
         static readonly JsonConverter[] TextureConverters = { new XNARectangleConverter() };
-        static readonly JsonConverter[] SaveDataConverters = { new ItemConverter(), new XNAVector2Converter(), new XNARectangleConverter(), new XNAPointConverter(), new GenericPropConverter() };
+        static readonly JsonConverter[] SaveDataConverters = { new GenericPropConverter(), new ItemConverter(), new XNAVector2Converter(), new XNARectangleConverter() };
         static readonly JsonConverter[] FormtTextCoverters = { new XNAVector2Converter(), new XNAColorConverter() };
         static readonly JsonConverter[] ParticleConverters = { new XNARectangleConverter(), new XNAVector2Converter(), new XNAColorConverter() };
         static readonly JsonConverter[] OverworldConverters = { new XNAPointConverter() };
@@ -51,9 +55,11 @@ namespace ChasmDeserializer
 
         static void Main(string[] args)
         {
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+
             if (args == null || args.Length < 3 || !File.Exists(args[2]))
             {
-                Console.Write($"No proper arguments were specified or input file not found.{helpMsg}{version}");
+                Console.Write($"No proper arguments were specified or input file not found.{helpMsg}{version}{gameVer}");
                 return;
             }
             var action = args[0].ToLower();
@@ -70,15 +76,20 @@ namespace ChasmDeserializer
                         {
                             var binary = LoadBinary<CSVData>(inFile);
                             var ext = outFile.LastIndexOf('.') > -1 && (outFile.Length - outFile.LastIndexOf('.')) == 4 ? outFile.Substring(outFile.LastIndexOf('.') + 1) : string.Empty;
-                            var decoded = String.Equals(ext, "csv", StringComparison.OrdinalIgnoreCase) ? processCVS(binary).ToString() : JsonConvert.SerializeObject(binary, Formatting.Indented, new StringCollectionConverter());
+                            var decoded = String.Equals(ext, "csv", StringComparison.OrdinalIgnoreCase)
+                                ? CSVReaderWriter.WriteCSV(binary)
+                                : JsonConvert.SerializeObject(binary, Formatting.Indented, new StringCollectionConverter());
                             File.WriteAllText(outFile, decoded);
                         }
                         else if (action == "-s")
                         {
-                            var cvsdata = JsonConvert.DeserializeObject<CSVData>(File.ReadAllText(inFile));
+                            var ext = inFile.LastIndexOf('.') > -1 && (inFile.Length - inFile.LastIndexOf('.')) == 4 ? inFile.Substring(inFile.LastIndexOf('.') + 1) : string.Empty;
+                            var cvsdata = String.Equals(ext, "csv", StringComparison.OrdinalIgnoreCase)
+                                ? CSVReaderWriter.ReadCSV(inFile)
+                                : JsonConvert.DeserializeObject<CSVData>(File.ReadAllText(inFile));
                             SaveBinary<CSVData>(outFile, cvsdata);
                         }
-                        else { reply = $"No proper arguments were specified.{helpMsg}{version}"; }
+                        else { goto default; }
                         break;
                     case "-anm":
                             ProcessObject<Animations>(action, inFile, outFile, Formatting.Indented, Anim2DConverters);
@@ -111,15 +122,18 @@ namespace ChasmDeserializer
                             ProcessObject<ParticleEngine>(action, inFile, outFile, Formatting.Indented, ParticleConverters);
                         break;
                     default:
-                        reply = $"No proper arguments were specified.{helpMsg}{version}";
+                        reply = $"No proper arguments were specified.{helpMsg}";
                         break;
                 }
             }
-            catch (Exception ex) { reply = $"ERROR: {ex}"; }
+            catch (Exception ex)
+            {
+                reply = $"ERROR: {ex.Message}\nEXCEPTION STACK: {ex}";
+            }
             Console.Write(reply);
         }
 
-        // Generics
+        // Processing stuff
 
         private static void ProcessObject<T>(string action, string inFile, string outFile, Formatting format = Formatting.Indented, JsonConverter[] converters = null) where T : IBinarySaveLoad
         {
@@ -148,19 +162,6 @@ namespace ChasmDeserializer
                 reply = $"No proper arguments were specified.{helpMsg}";
                 return;
             }
-        }
-        private static StringBuilder processCVS(CSVData data)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendLine(string.Join(",", data.headers));
-            foreach (var list in data.values)
-            {
-                for (int i = 0; i < list.Count; i++)
-                    if (list[i].IndexOf(',') > -1 || list[i].IndexOf('"') > -1 || list[i].IndexOf('\n') > -1)
-                        list[i] = String.Concat("\"", list[i], "\"");
-                builder.AppendLine(string.Join(",", list));
-            }
-            return builder;
         }
         private static T LoadBinary<T>(string path) where T : IBinarySaveLoad
         {

@@ -3,6 +3,7 @@ using System.Linq;
 using System.IO;
 using Microsoft.Xna.Framework;
 using Newtonsoft.Json;
+using ChasmDeserializer.Extensions;
 
 namespace ChasmDeserializer.Model
 {

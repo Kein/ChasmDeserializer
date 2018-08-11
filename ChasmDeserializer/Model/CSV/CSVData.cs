@@ -1,4 +1,5 @@
-﻿using ChasmDeserializer.Interfaces;
+﻿using ChasmDeserializer.Extensions;
+using ChasmDeserializer.Interfaces;
 using System.Collections.Generic;
 using System.IO;
 
@@ -28,23 +29,13 @@ namespace ChasmDeserializer
         }
         public void Save(BinaryWriter writer)
         {
-            if (this.headers == null)
-            {
-                writer.Write(0);
-            }
-            else
-            {
-                writer.Write(this.headers.Count);
-                foreach (string s in this.headers)
+            headers = headers ?? new List<string>(0);
+            writer.Write(headers.Count);
+                foreach (string s in headers)
                     writer.Write(s.NullCheck());
-            }
-            if (this.values == null)
-            {
-                writer.Write(0);
-                return;
-            }
-            writer.Write(this.values.Count);
-            foreach (List<string> list in this.values)
+            values = values ?? new List<List<string>>(0);
+            writer.Write(values.Count);
+            foreach (List<string> list in values)
             {
                 writer.Write(list.Count);
                 foreach (string s2 in list)

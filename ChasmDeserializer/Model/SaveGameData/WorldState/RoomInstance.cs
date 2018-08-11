@@ -1,4 +1,5 @@
-﻿using ChasmDeserializer.Interfaces;
+﻿using ChasmDeserializer.Extensions;
+using ChasmDeserializer.Interfaces;
 using ChasmDeserializer.Model.SaveGameData.WorldState.Saveable;
 using System;
 using System.Collections.Generic;

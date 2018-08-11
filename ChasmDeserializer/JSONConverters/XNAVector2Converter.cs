@@ -2,19 +2,13 @@
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
 namespace ChasmDeserializer.JSONConverters
 {
     public class XNAVector2Converter : JsonConverter
     {
         public Formatting Identation { get; set; }
-        public XNAVector2Converter(Formatting Formatting = Formatting.None)
-        {
-            Identation = Formatting;
-        }
+        public XNAVector2Converter(Formatting Formatting = Formatting.None) => Identation = Formatting;
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var vector2 = (Vector2)value;
@@ -35,15 +29,10 @@ namespace ChasmDeserializer.JSONConverters
             return new Vector2(x, y);
         }
 
-        public override bool CanConvert(Type objectType)
-        {
-            return objectType.Equals(typeof(Vector2));
-        }
+        public override bool CanConvert(Type objectType) =>
+            objectType.Equals(typeof(Vector2));
 
-        private static float? GetTokenValue(JObject o, string tokenName)
-        {
-            JToken t;
-            return o.TryGetValue(tokenName, StringComparison.OrdinalIgnoreCase, out t) ? (float)t : (float?)null;
-        }
+        private static float? GetTokenValue(JObject o, string tokenName) =>
+            o.TryGetValue(tokenName, StringComparison.OrdinalIgnoreCase, out JToken t) ? (float)t : (float?)null;
     }
 }

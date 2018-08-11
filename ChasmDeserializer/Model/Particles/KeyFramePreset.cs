@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChasmDeserializer.Extensions;
+using System;
 using System.IO;
 
 namespace ChasmDeserializer.Model.Particles

@@ -1,11 +1,10 @@
 ﻿using Microsoft.Xna.Framework;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace ChasmDeserializer
+namespace ChasmDeserializer.Extensions
 {
-    public static class Extensions
+    public static class BinaryRWExtensions
     {
         // Whatever man
         public static string NullCheck(this string s) => s = s ?? string.Empty;

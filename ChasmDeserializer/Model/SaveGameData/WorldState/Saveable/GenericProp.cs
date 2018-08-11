@@ -1,4 +1,5 @@
-﻿using Microsoft.Xna.Framework;
+﻿using ChasmDeserializer.Extensions;
+using Microsoft.Xna.Framework;
 using System.IO;
 
 namespace ChasmDeserializer.Model.SaveGameData.WorldState.Saveable
