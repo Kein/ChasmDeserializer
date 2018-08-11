@@ -2,9 +2,9 @@ A simple tool for Chasm gamedata deserialization.
 
 # NOTES
 * Particles currently cannot be saved.
-* When decoding normal '.ser' files you can specify output file
-  with extension '.csv' to receive standard CSV sheet for tables.
- * CSV reader currenty not supported.
+* When deserializing (-d) or serializing (-s) normal '.ser'
+  files you can specify [input] or <output> file accordingly
+  with  extension '.csv' to process standard CSV sheet from EXEL
 
 # USAGE:
 ```
@@ -27,6 +27,11 @@ TYPES:
 ```
 
 # CHANGELOG
+Aug 11/18 v0.4a
+- Added support for latest patch 1.03 as of 11.08.2018
+- Added read/write support for CSV (you now can serialize/deserialize)
+  proper CSV format, see https://www.ietf.org/rfc/rfc4180.txt for syntax
+
 Aug 10/18 v0.4
 - Added OverWorldState deserializing to savedgame
 - Small change in JSOn format for FormattedText - it is now part
