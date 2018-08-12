@@ -1,4 +1,4 @@
-﻿    using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -224,7 +224,9 @@ namespace ChasmDeserializer.Model
                 writer.Write(mark.Key);
                 mark.Value.Save(writer);
             }
-            writer.Write(this.GameBuildVersion.NullCheck());
+            // Shouldnt just write game build version - needs backward compatibility.
+            if (this.GameBuildVersion != null)
+                writer.Write(this.GameBuildVersion.NullCheck());
             if (this.OverWorldSaveState != null)
             {
                 writer.Write(true);
