@@ -4,7 +4,7 @@ A simple tool for Chasm gamedata deserialization.
 * Particles currently cannot be saved.
 * When deserializing (-d) or serializing (-s) normal '.ser'
   files you can specify [input] or <output> file accordingly
-  with  extension '.csv' to process standard CSV sheet from EXEL
+  with  extension '.csv' to process standard CSV sheet from EXCEL
 
 # USAGE:
 ```
