@@ -27,6 +27,10 @@ TYPES:
 ```
 
 # CHANGELOG
+Dec 22/18 v0.6
+- Added support for latest patch 1.042 as of 22.12.2018
+- Backwards compatibility for UserStats in Userinfo.cfg
+
 Aug 11/18 v0.4a
 - Added support for latest patch 1.03 as of 11.08.2018
 - Added read/write support for CSV (you now can serialize/deserialize)
