@@ -166,6 +166,13 @@
         Tier2,
         Tier3
     }
+    public enum ClassMode
+	{
+		Off,
+		Mage,
+		Warrior,
+		Thief
+	}
 
     // StringStore Enums
     public enum NoteStyle

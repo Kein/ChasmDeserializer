@@ -36,6 +36,7 @@ namespace ChasmDeserializer.Model
         public float OverworldFileVersion;
         public OverWorldSaveState OverWorldSaveState;
         public string GameBuildVersion;
+        public ClassMode ClassMode;
         [JsonIgnore]
         private byte[] OverWorldSaveStateBytes;
 
@@ -45,7 +46,7 @@ namespace ChasmDeserializer.Model
             float version = string.IsNullOrEmpty(CurrentSaveVersion) ? -1f : float.Parse(CurrentSaveVersion, NumberStyles.AllowDecimalPoint, NumberFormatInfo.InvariantInfo);
             if (version <= 0f)
             {
-                Console.WriteLine($"Invalid or outdated save data version detected: {version}");
+                Console.WriteLine($"Invalid or very outdated save data version detected: {version}");
                 return;
             }
             SaveSlot = read.ReadInt32();
@@ -133,6 +134,7 @@ namespace ChasmDeserializer.Model
                     RoomMarks.Add(roomkey, roomMark);
                 }
                 GameBuildVersion = version >= 1.79f ? read.ReadString() : null;
+                ClassMode = version >= 1.8f ? (ClassMode)read.ReadInt32() : 0;
             }
             bool hasOverworldData = read.ReadBoolean();
             if (hasOverworldData)
@@ -224,9 +226,13 @@ namespace ChasmDeserializer.Model
                 writer.Write(mark.Key);
                 mark.Value.Save(writer);
             }
-            // Shouldnt just write game build version - needs backward compatibility.
+            // Shouldnt just write game build version and class
+            // - need backward compatibility?
             if (this.GameBuildVersion != null)
                 writer.Write(this.GameBuildVersion.NullCheck());
+            // Same here, older versions have to classes
+            if (version >= 1.8f)
+                writer.Write((int)ClassMode);
             if (this.OverWorldSaveState != null)
             {
                 writer.Write(true);
