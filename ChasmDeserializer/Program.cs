@@ -20,8 +20,8 @@ namespace ChasmDeserializer
     public class Program
     {
         // No, I'm not using NDesk or Mono.Options, bite me.
-        private const string version = "\nCurrent version: v0.6 (22 Dec 2018) KZ";
-        private const string gameVer = "\nSupported game version: v1.040 (from 11 Nov 2018)";
+        private const string version = "\nCurrent version: v0.61 (02 Jan 2019) KZ";
+        private const string gameVer = "\nSupported game version: v1.049 (from 01 Jan 2019)";
         private const string helpMsg =
             "\nUSAGE:\n" +
             "ChasmDes.exe [action] [type] [inputFile] <outputFile>\n" +

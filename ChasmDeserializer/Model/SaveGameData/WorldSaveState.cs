@@ -37,6 +37,7 @@ namespace ChasmDeserializer.Model
         public OverWorldSaveState OverWorldSaveState;
         public string GameBuildVersion;
         public ClassMode ClassMode;
+
         [JsonIgnore]
         private byte[] OverWorldSaveStateBytes;
 

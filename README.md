@@ -27,6 +27,9 @@ TYPES:
 ```
 
 # CHANGELOG
+Jan 02/19 v0.61
+- Added support for latest patch 1.049 as of 01.01.2019
+
 Dec 22/18 v0.6
 - Added support for latest patch 1.042 as of 22.12.2018
 - Backwards compatibility for UserStats in Userinfo.cfg

@@ -12,8 +12,16 @@ namespace ChasmDeserializer.Model
         public string ID;
         public int Count;
         public int Experience;
-        public UnlockTier UnlockTier;
+        public ItemRarity Rarity;
+        public int Mod_CON;
+        public int Mod_HP;
+        public int Mod_INT;
+        public int Mod_LCK;
+        public int Mod_MP;
+        public int Mod_STR;
 
+        [JsonIgnore]
+        private bool UncommonRarity => Rarity > ItemRarity.Common;
         [JsonIgnore]
         private static readonly string[] familiars = { "head_birdhat", "head_birdhat_blue", "head_swordhat" };
 
@@ -32,7 +40,16 @@ namespace ChasmDeserializer.Model
                                            : item;
             item.ID = id;
             item.Count = reader.ReadInt32();
-            item.UnlockTier = (UnlockTier)reader.ReadInt32();
+            item.Rarity = (ItemRarity)reader.ReadInt32();
+            if (item.Rarity > ItemRarity.Common)
+	        {
+		        item.Mod_CON = reader.ReadInt32();
+		        item.Mod_HP = reader.ReadInt32();
+		        item.Mod_INT = reader.ReadInt32();
+		        item.Mod_LCK = reader.ReadInt32();
+		        item.Mod_MP = reader.ReadInt32();
+		        item.Mod_STR = reader.ReadInt32();
+	        }
             if (saveVersion >= 1.76f)
             {
                 item.Experience = reader.ReadInt32();
@@ -50,11 +67,28 @@ namespace ChasmDeserializer.Model
             }
             writer.Write(ID);
             writer.Write(Count);
-            writer.Write((int)UnlockTier);
+            writer.Write((int)Rarity);
+            if (this.Rarity > ItemRarity.Common)
+	        {
+		        writer.Write(this.Mod_CON);
+		        writer.Write(this.Mod_HP);
+		        writer.Write(this.Mod_INT);
+		        writer.Write(this.Mod_LCK);
+		        writer.Write(this.Mod_MP);
+		        writer.Write(this.Mod_STR);
+	        }
             writer.Write(Experience);
         }
 
-        public virtual void LoadCustom(BinaryReader reader){}
+        public virtual void LoadCustom(BinaryReader reader) {}
+
+        public bool ShouldSerializeMod_CON() => UncommonRarity;
+        public bool ShouldSerializeMod_HP() => UncommonRarity;
+        public bool ShouldSerializeMod_INT() => UncommonRarity;
+        public bool ShouldSerializeMod_LCK() => UncommonRarity;
+        public bool ShouldSerializeMod_MP() => UncommonRarity;
+        public bool ShouldSerializeMod_STR() => UncommonRarity;
+
     }
 
     public class AssassinsSword : Item

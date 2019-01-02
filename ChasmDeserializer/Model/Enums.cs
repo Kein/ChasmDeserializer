@@ -159,13 +159,12 @@
         Normal,
         Arcade
     }
-    public enum UnlockTier
-    {
-        None,
-        Tier1,
-        Tier2,
-        Tier3
-    }
+    public enum ItemRarity
+	{
+		Common,
+		Unique,
+		Legendary
+	}
     public enum ClassMode
 	{
 		Off,
